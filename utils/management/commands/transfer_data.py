@@ -8,8 +8,8 @@ class Command(BaseCommand):
     help = "Transfer data from SQLite (default) to MySQL (mysql)"
 
     def handle(self, *args, **options):
-        source = 'default'  # SQLite
-        target = 'old_db'    # MySQL
+        source = 'old_db'  # SQLite
+        target = 'default'    # MySQL
 
         models = apps.get_app_config('utils').get_models()
 
