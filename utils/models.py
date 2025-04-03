@@ -71,19 +71,6 @@ class Dmtt(models.Model):
         db_table = 'dmtt'
 
 
-class HistoryStore(models.Model):
-    pk = models.CompositePrimaryKey('table_name', 'pk_date_dest')
-    timemark = models.DateTimeField()
-    table_name = models.CharField(max_length=50)
-    pk_date_src = models.CharField(max_length=400)
-    pk_date_dest = models.CharField(max_length=400)
-    record_state = models.SmallIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'history_store'
-        unique_together = (('table_name', 'pk_date_dest'),)
-
 
 class Limit(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -122,11 +109,20 @@ class Orders(models.Model):
     company = models.ForeignKey(Company, models.DO_NOTHING)
     dmtt = models.ForeignKey(Dmtt, models.DO_NOTHING)
     datetime = models.DateTimeField(blank=True, null=True)
-    order_status = models.CharField(blank=True, null=True)
+    
     deadline = models.DateTimeField(blank=True, null=True)
     sequence_number = models.IntegerField()
     drive_document_id = models.CharField(max_length=63, blank=True, null=True)
     message_id = models.CharField(max_length=63, blank=True, null=True)
+
+    ORDER_STATUS_CHOICES = [
+        ('PENDING', 'Kutilmoqda'),
+        ('IN_PROGRESS', 'Bajarilyapti'),
+        ('REJECTED', 'Rad etilgan'),
+        ('ACCEPTED', 'Bajarilgan'),
+    ]
+    order_status = models.CharField(
+        max_length=11, choices=ORDER_STATUS_CHOICES, default="PENDING")
 
     class Meta:
         managed = False
